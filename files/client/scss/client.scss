@@ -1,0 +1,156 @@
+@import "variables_client";
+@import "variables";
+@import "custom";
+.text-intro{
+    font-size : 1.2em; 
+} 
+// ==========================================
+// CONFIGURATION (Joue avec ces valeurs !)
+// ==========================================
+
+// 1. Quantité et Couleurs
+$petal-count: 80;            // Nombre de pétales
+$petal-colors: (             
+  #ffb7c5, 
+  #ffcce0, 
+  #ffe6f0,
+  #ff99b3
+);
+
+// 2. Physique du Vent (Base)
+$wind-direction: 1;          // 1 = Vers la droite, -1 = Vers la gauche
+$wind-force-min: 20;         // Déplacement min (vw)
+$wind-force-max: 80;         // Déplacement max (vw)
+
+// 3. Taille et Forme
+$size-min: 8;                // px
+$size-max: 18;               // px
+
+// 4. Temps
+$duration-min: 5;            // secondes
+$duration-max: 12;           // secondes
+
+// 5. Zone d'apparition
+$start-pos-min: -50;         // % gauche
+$start-pos-max: 80;          // % droite
+
+// 6. Comportement (NOUVEAU : Rafales et Loopings)
+$loop-chance: 25;            // % de chance qu'un pétale fasse un looping
+$gust-chance: 20;            // % de chance qu'un pétale soit pris dans une rafale (plus rapide)
+
+
+// ==========================================
+// LOGIQUE DES PÉTALES
+// ==========================================
+
+.petal {
+  position: absolute;
+  top: -10vh;
+  border-radius: 150% 0 150% 0;
+  opacity: 0.8;
+  will-change: transform, top;
+  // Par défaut, animation linéaire standard
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+// Boucle SASS
+@for $i from 1 through $petal-count {
+  .petal:nth-child(#{$i}) {
+    $size: random($size-max - $size-min) + $size-min + px;
+    width: $size;
+    height: $size;
+
+    $range: $start-pos-max - $start-pos-min;
+    left: (random($range) + $start-pos-min) * 1%;
+
+    background: nth($petal-colors, random(length($petal-colors)));
+
+    $duration: random($duration-max - $duration-min) + $duration-min + s;
+    animation-duration: $duration;
+    animation-delay: random(20) * -1s;
+
+    // Détermination du comportement (Aléatoire)
+    $is-gust: random(100) <= $gust-chance;
+    $is-loop: random(100) <= $loop-chance;
+
+    // Calcul de la dérive (Drift)
+    $base-drift: (random($wind-force-max - $wind-force-min) + $wind-force-min);
+    
+    // Si c'est une rafale, on double la force du vent
+    @if $is-gust {
+       $base-drift: $base-drift * 1.5;
+       animation-timing-function: ease-out; // Accélération différente
+       opacity: 0.9;
+    }
+
+    $drift: $base-drift * 1vw * $wind-direction;
+    --drift: #{$drift};
+    
+    // Rotation finale
+    $rot: random(360) + 180 + deg;
+    --rot: #{$rot};
+
+    // Si c'est un "looper", on change l'animation
+    @if $is-loop {
+      animation-name: fall-loop;
+      // On augmente un peu la durée pour laisser le temps au looping de se voir
+      animation-duration: $duration + 2s; 
+      z-index: 10; // Passe devant les autres pendant le loop
+    }
+  }
+}
+
+// ==========================================
+// KEYFRAMES
+// ==========================================
+
+// Animation Standard (Chute calme)
+@keyframes fall {
+  0% {
+    opacity: 0;
+    top: -10%;
+    transform: translateX(0) rotate(0deg);
+  }
+  10% { opacity: 1; }
+  90% { opacity: 0.8; }
+  100% {
+    opacity: 0;
+    top: 110%;
+    transform: translateX(var(--drift)) rotate(var(--rot));
+  }
+}
+
+// Animation "Looping" (Chute avec pirouette)
+@keyframes fall-loop {
+  0% {
+    opacity: 0;
+    top: -10%;
+    transform: translateX(0) rotate(0deg);
+  }
+  10% { opacity: 1; }
+  
+  // Début du looping (vers 40% du parcours)
+  40% {
+    // On commence à tourner vite
+    transform: translateX(calc(var(--drift) * 0.3)) rotate(180deg);
+  }
+  50% {
+    // Le sommet du looping : on remonte un peu (translateY négatif) 
+    // et on décale horizontalement
+    transform: translateX(calc(var(--drift) * 0.5 + 40px)) translateY(-30px) rotate(540deg) scale(1.1);
+    opacity: 1;
+  }
+  60% {
+    // Fin du looping, retour à la trajectoire descendante
+    transform: translateX(calc(var(--drift) * 0.7)) rotate(720deg);
+  }
+
+  100% {
+    opacity: 0;
+    top: 110%;
+    // On finit avec beaucoup plus de rotation à cause de l'élan
+    transform: translateX(var(--drift)) rotate(calc(var(--rot) + 720deg));
+  }
+}

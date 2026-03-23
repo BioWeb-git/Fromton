@@ -1,0 +1,9 @@
+.tl_listing_container > ul > li .tl_content:hover .cte_type,
+#ctrl_modules tbody tr:hover{
+    background: #00ff5b33;
+}
+
+body:not(.be_login) #main{
+    max-width: 1200px;
+    margin: 0;
+}
