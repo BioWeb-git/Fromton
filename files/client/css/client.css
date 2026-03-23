@@ -18404,6 +18404,10 @@ form .honeyshow {
     transform: translateX(0);
   }
 }
+.main-content .-color-inverted h2 {
+  color: white;
+}
+
 .tagline,
 #tagline-intro {
   margin-top: 0;
@@ -18612,8 +18616,8 @@ body.scroll .header-navigation .header-bar .header-bar-inner {
 .header-navigation .header-bar .header-bar-inner .navigation-wrapper.center-navigation-wrapper .logo span,
 .header-navigation .header-bar .header-bar-inner .navigation-wrapper.center-navigation-wrapper .logo a {
   display: block;
-  width: 140px;
-  height: 140px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 0 0 0 4px white, 0 0 0 5px rgba(248, 172, 31, 0.08);
@@ -18668,6 +18672,7 @@ body.scroll .header-navigation .header-bar .header-bar-inner .navigation-wrapper
   margin: 0;
 }
 .header-navigation .header-bar .header-bar-inner .navigation-wrapper.right-navigation-wrapper nav.secondary-navigation ul.level_1 li a {
+  border-radius: 50px;
   color: #231f20;
   font-family: "Anton", sans-serif;
   font-size: 1.3rem;
@@ -18680,6 +18685,9 @@ body.scroll .header-navigation .header-bar .header-bar-inner .navigation-wrapper
 }
 .header-navigation .header-bar .header-bar-inner .navigation-wrapper.right-navigation-wrapper nav.secondary-navigation ul.level_1 li a:hover {
   color: #f8ac1f;
+}
+.header-navigation .header-bar .header-bar-inner .navigation-wrapper.right-navigation-wrapper nav.secondary-navigation ul.level_1 li a.trail:hover {
+  color: black;
 }
 .header-navigation .header-bar .header-bar-inner .navigation-wrapper.right-navigation-wrapper ul.icon-links {
   display: flex;
@@ -18894,7 +18902,7 @@ body.scroll .header-navigation .header-bar .header-bar-inner .navigation-wrapper
   margin-bottom: 50px;
   display: flex;
   justify-content: center;
-  gap: 50px;
+  gap: 20px;
   flex-wrap: nowrap;
   white-space: nowrap;
 }
@@ -19160,8 +19168,6 @@ body.scroll .header-navigation .header-bar .header-bar-inner .navigation-wrapper
   font-family: "Anton", sans-serif;
   color: #231f20;
   font-size: 2.8rem;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
   line-height: 1.05;
   margin-bottom: 20px;
   text-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
@@ -19215,12 +19221,12 @@ body.scroll .header-navigation .header-bar .header-bar-inner .navigation-wrapper
 h2.headline {
   font-family: "Anton", sans-serif;
   color: #231f20;
-  font-size: 2.8rem;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   line-height: 1.05;
   margin-bottom: 20px;
   text-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  font-size: 4rem;
 }
 @media screen and (max-width: 700px) {
   h2.headline {

@@ -51,6 +51,10 @@
   }
 }
 
+.main-content .-color-inverted h2 {
+  color: $white;
+}
+
 // Section d'introduction (Tagline)
 .tagline,
 #tagline-intro {
@@ -294,8 +298,8 @@
             span,
             a {
               display: block;
-              width: 140px;
-              height: 140px;
+              width: 180px;
+              height: 180px;
               border-radius: 50%;
               border: 1px solid rgba(0, 0, 0, 0.08);
               box-shadow:
@@ -360,6 +364,7 @@
               margin: 0;
 
               li a {
+                border-radius: 50px;
                 color: $brand-secondary;
                 font-family: $font-family2;
                 font-size: 1.3rem;
@@ -372,6 +377,12 @@
 
                 &:hover {
                   color: $brand-primary;
+                }
+
+                &.trail {
+                  &:hover {
+                    color: black;
+                  }
                 }
               }
             }
@@ -628,7 +639,7 @@
       margin-bottom: 50px;
       display: flex;
       justify-content: center;
-      gap: 50px;
+      gap: 20px;
       flex-wrap: nowrap;
       white-space: nowrap;
 
@@ -948,8 +959,6 @@
       font-family: $font-family2;
       color: $brand-secondary;
       font-size: 2.8rem;
-      text-transform: uppercase;
-      letter-spacing: -0.02em;
       line-height: 1.05;
       margin-bottom: 20px;
       text-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
@@ -1007,12 +1016,13 @@
 h2.headline {
   font-family: $font-family2;
   color: $brand-secondary;
-  font-size: 2.8rem;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   line-height: 1.05;
   margin-bottom: 20px;
   text-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+
+  font-size: 4rem;
 
   @include mediaquery(mobile) {
     font-size: 2rem;
