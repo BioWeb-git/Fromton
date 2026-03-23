@@ -1,9 +1,33 @@
 $legacy-support-for-ie: false;
-$text-transform: none;
+$text-transform: uppercase;
+
+// Brand Colors
+$brand-primary: #f8ac1f;
+$brand-secondary: #231f20;
+
+// Overrides for standard variables (from _variables.scss)
+$color1: $brand-primary;
+$color2: $brand-secondary;
+
+$link-color: $brand-primary;
+$nav-color: $brand-primary;
+$nav-hover-color: darken($brand-primary, 10%);
+$nav-active-color: $brand-primary;
+
+$headline-color-1: $brand-secondary;
+$headline-color-2: $brand-secondary;
 
 $max-width: 1500px;
 $breakpoint-desktopxl: 1400px !default;
+
+// Theme variable overrides
+$button-background-color: $brand-secondary;
+$button-color: #fff;
+$selection-color: $brand-primary;
 $breakpoint-desktop: $max-width !default;
 $breakpoint-tablet: 1000px !default;
 $breakpoint-mobile: 700px !default;
 $breakpoint-mobile-portrait: 600px !default;
+
+// Typography Refinement
+$font-weight2: 700; // Bold pour Oswald (Titres)

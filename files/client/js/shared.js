@@ -1,11 +1,11 @@
-var hideDataFrontEndHelper = function(){
+var hideDataFrontEndHelper = function () {
     $('html *').removeAttr("data-frontend-helper");
-    $('body').click(function() {
+    $('body').click(function () {
         $('.rsfh-lightbox-close').text("Fermer");
         $('.rsfh-lightbox-cancel').text("Annuler");
     });
 };
-var scrollClass = function(){
+var scrollClass = function () {
     var y = $(this).scrollTop();
     if (y > 200) {
         $("body").addClass("scroll");
@@ -13,7 +13,7 @@ var scrollClass = function(){
         $("body").removeClass("scroll");
     }
 }
-var scrollAnchor = function(){
+var scrollAnchor = function () {
     // Assign the HTML, Body as a variable...
     $viewport = $('html, body');
 
@@ -35,7 +35,7 @@ var scrollAnchor = function(){
 
         //goto that anchor by setting the body scroll top to anchor top
         // EASES CURVES > https://jqueryui.com/resources/demos/effect/easing.html
-        $viewport.animate({scrollTop: target_top}, 500, 'swing');
+        $viewport.animate({ scrollTop: target_top }, 500, 'swing');
 
         $viewport.bind("scroll mousedown DOMMouseScroll mousewheel keyup", function () {
             $viewport.stop();

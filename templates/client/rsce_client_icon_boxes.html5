@@ -27,7 +27,7 @@
 				$style[] = 'background-color: #' . ($box->backgroundColor ?: $this->backgroundColor) . ';';
 			}
 			if ($this->boxRadius){
-				$style[] = 'border-radius: ' . $this->boxRadius .';';
+				$style[] = 'overflow:hidden; border-radius: ' . $this->boxRadius .';';
 			}
 			if ($this->boxPadding) {
 				$style[] = 'padding: ' . $this->boxPadding . ';';
@@ -45,7 +45,7 @@
 				$iconStyle[] = 'padding: ' . $this->iconPadding .';';
 			}
 			if ($this->iconRadius){
-				$iconStyle[] = 'border-radius: ' . $this->iconRadius .';';
+				$iconStyle[] = 'overflow:hidden; border-radius: ' . $this->iconRadius .';';
 			}
 			if ($this->iconBorderColor){
 				$iconStyle[] = 'border-color: #' . $this->iconBorderColor .';';
