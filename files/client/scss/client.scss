@@ -71,7 +71,8 @@
 
 
 // Global Button Style - Premium Core
-.button {
+.button,
+.feature-box-link {
   display: inline-block;
   text-align: center;
   text-decoration: none;
@@ -90,32 +91,36 @@
   font-size: 0.9rem;
   color: white !important;
 
-  // Bordure Cristalline
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  // Bordure Cristalline (Laqué)
+  border: 1px solid rgba(255, 255, 255, 0.18);
 
-  // Fond Gradient Matte-Glass
-  background: linear-gradient(135deg,
-      #2c2829 0%,
-      #231f20 100%);
+  // Fond Noir Piano Glossy
+  background: linear-gradient(180deg,
+      #1a1718 0%,
+      #0a0809 45%,
+      #000000 50%,
+      #050405 100%);
 
-  // Effet de profondeur et Glassmorphism
+  // Effet de profondeur et Brillance Inset
   box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.25),
-    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    0 15px 35px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
 
   transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 
-  // Reflet fixe léger (Glass texture)
+  // Effet Glossy (Réflexion supérieure tranchée)
   &::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 50%;
-    background: linear-gradient(rgba(255, 255, 255, 0.05) 0%,
-        transparent 100%);
-    z-index: -1;
+    height: 100%;
+    background: linear-gradient(rgba(255, 255, 255, 0.12) 0%,
+        rgba(255, 255, 255, 0.03) 48%,
+        transparent 50%);
+    z-index: 1;
+    pointer-events: none;
   }
 
   // Balayage lumineux (Shine Sweep)
@@ -129,7 +134,7 @@
     background: linear-gradient(90deg,
         transparent,
         rgba(255, 255, 255, 0.02) 20%,
-        rgba(255, 255, 255, 0.25) 50%,
+        rgba(255, 255, 255, 0.35) 50%, // Boosté
         rgba(255, 255, 255, 0.02) 80%,
         transparent);
     transition: all 0s;
@@ -301,11 +306,11 @@
               width: 180px;
               height: 180px;
               border-radius: 50%;
-              border: 1px solid rgba(0, 0, 0, 0.08);
+              border: 1px solid rgba(0, 0, 0, 0.1);
               box-shadow:
-                0 10px 25px rgba(0, 0, 0, 0.05), // Ombre plus courte et légère
-                0 0 0 4px white, // Ring 1
-                0 0 0 5px rgba($brand-primary, 0.08); // Ring 2 plus discret
+                0 10px 25px rgba(0, 0, 0, 0.05),
+                0 0 0 4px white,
+                0 0 0 5px rgba($brand-primary, 0.08);
               background: white;
               margin-bottom: -70px;
               z-index: 10;
@@ -316,14 +321,42 @@
               // Animation souffle logo
               animation: logoBreath 1.2s cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s backwards;
 
-              &::before {
+              // 1. EFFET GLOSSY FIXE (Calotte de verre)
+              &::after {
                 content: '';
                 position: absolute;
                 inset: 0;
                 border-radius: 50%;
-                box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.03);
+                background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.25) 0%,
+                    rgba(255, 255, 255, 0.05) 48%,
+                    transparent 50%);
+                z-index: 11;
                 pointer-events: none;
-                z-index: 2;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+              }
+
+              // 2. BALAYAGE LUMINEUX DYNAMIQUE (Hover Shine)
+              &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -150%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.3) 50%,
+                    transparent);
+                z-index: 12;
+                transform: skewX(-20deg);
+                transition: none;
+                pointer-events: none;
+              }
+
+              &:hover::before {
+                left: 150%;
+                transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
               }
 
               body.scroll & {
@@ -363,25 +396,31 @@
               padding: 0;
               margin: 0;
 
-              li a {
-                border-radius: 50px;
-                color: $brand-secondary;
-                font-family: $font-family2;
-                font-size: 1.3rem;
-                letter-spacing: 0.25em;
-                text-decoration: none;
-                text-transform: uppercase;
-                font-weight: 400;
-                padding: 0.5em;
-                transition: color 0.3s ease;
+              li {
 
-                &:hover {
-                  color: $brand-primary;
-                }
+                a,
+                strong {
+                  border-radius: 50px;
+                  color: $brand-secondary;
+                  font-family: $font-family2;
+                  font-size: 1.3rem;
+                  letter-spacing: 0.25em;
+                  text-decoration: none;
+                  text-transform: uppercase;
+                  font-weight: 400;
+                  padding: 0.5em;
+                  transition: color 0.3s ease;
 
-                &.trail {
-                  &:hover {
-                    color: black;
+                  a {
+                    &:hover {
+                      color: $brand-primary;
+                    }
+                  }
+
+                  &.trail {
+                    &:hover {
+                      color: black;
+                    }
                   }
                 }
               }
@@ -637,14 +676,46 @@
 
     .words {
       margin-bottom: 50px;
+      padding: 15px 0; // Espace pour les lignes animées
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 15px;
       flex-wrap: nowrap;
       white-space: nowrap;
+      position: relative;
+
+      // Lignes animées top & bottom
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 4px;
+        background: $brand-primary;
+        transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1) 0.5s; // Délai pour l'élégance
+      }
+
+      &::before {
+        top: 0;
+      }
+
+      &::after {
+        bottom: 0;
+      }
+
+      // Déclenchement au scroll
+      .in-view & {
+
+        &::before,
+        &::after {
+          width: 100%;
+        }
+      }
 
       @include mediaquery(tablet) {
-        gap: 30px;
+        gap: 20px;
         margin-bottom: 40px;
       }
 
@@ -656,7 +727,7 @@
         letter-spacing: 0.35em;
         font-weight: 300;
         position: relative;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 0, 0, 0.2);
+        display: inline-block;
 
         &:not(:last-child)::after {
           content: '•';
@@ -738,14 +809,51 @@
         border-radius: 50%;
       }
 
+      // 1. EFFET GLOSSY FIXE (Dôme de verre)
       &::after {
         content: '';
         position: absolute;
         inset: 0;
         border-radius: 50%;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent 60%);
-        pointer-events: none;
+        background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.25) 0%,
+            rgba(255, 255, 255, 0.05) 48%,
+            transparent 50%);
         z-index: 2;
+        pointer-events: none;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.6s ease;
+      }
+
+      // 2. BALAYAGE LUMINEUX DYNAMIQUE (Hover Shine)
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -150%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent);
+        z-index: 3;
+        transform: skewX(-20deg);
+        pointer-events: none;
+      }
+    }
+
+    &:hover {
+      .icon-boxes-item-icon::before {
+        left: 150%;
+        transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+      }
+
+      .icon-boxes-item-icon::after {
+        background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.35) 0%,
+            rgba(255, 255, 255, 0.1) 48%,
+            transparent 50%);
       }
     }
 
@@ -795,6 +903,7 @@
           0 25px 50px rgba(0, 0, 0, 0.1),
           0 0 0 8px white,
           0 0 0 12px rgba($brand-primary, 0.15);
+        opacity: 1;
 
         img {
           transform: scale(1.1);
@@ -814,7 +923,6 @@
 
 // Layout Arguments / Feature Boxes - Version "Fioritures Premium"
 .feature-box {
-  padding: 100px 0;
   overflow: visible;
   display: flex;
   align-items: center;
@@ -824,8 +932,20 @@
 
   @include mediaquery(tablet) {
     flex-direction: column !important;
-    padding: 60px 0;
     gap: 40px;
+  }
+
+  &.feature-box-text-left {
+    text-align: left !important;
+  }
+
+  &.-no-image {
+    display: flex !important;
+
+    .feature-box-text {
+      padding: 0 !important;
+      max-width: 50%;
+    }
   }
 
   // 1. NUMÉROTATION EN FILIGRANE (Watermark)
@@ -867,7 +987,7 @@
   // Animations au scroll (croisées gche/dte)
   .feature-box-image,
   .feature-box-text {
-    opacity: 0;
+    opacity: 1;
     transition: all 1.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   }
 
@@ -921,27 +1041,62 @@
   }
 
   .feature-box-image {
-    flex: 1.1; // Image légèrement plus grande
+    flex: 1.1;
     position: relative;
     overflow: visible;
 
-    // Éclat de lumière directionnel (Fioriture)
+    // 1. PLAQUE DE VERRE (Glossy Overlay)
     &::after {
       content: '';
       position: absolute;
-      top: -20px;
-      left: -20px;
-      right: -20px;
-      bottom: -20px;
-      background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 50%);
-      pointer-events: none;
+      inset: 0;
+      border-radius: 60px; // Aligné sur l'image
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 0.2) 0%,
+          rgba(255, 255, 255, 0.02) 40%,
+          transparent 45%);
       z-index: 3;
+      pointer-events: none;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.8s ease;
+    }
+
+    // 2. SHINE DYNAMIQUE
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1) 50%,
+          transparent);
+      z-index: 4;
+      transform: skewX(-25deg);
+      pointer-events: none;
     }
   }
 
-  &:hover .feature-box-image img {
-    transform: scale(1.03) rotate(1deg);
-    box-shadow: 0 50px 120px rgba(0, 0, 0, 0.18);
+  &:hover {
+    .feature-box-image img {
+      transform: scale(1.03) rotate(0.5deg);
+      box-shadow: 0 50px 120px rgba(0, 0, 0, 0.18);
+    }
+
+    .feature-box-image::after {
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 0.3) 0%,
+          rgba(255, 255, 255, 0.05) 40%,
+          transparent 45%);
+      transform: scale(1.1);
+    }
+
+    .feature-box-image::before {
+      left: 120%;
+      transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+    }
   }
 
   // 3. TEXT Styling "Signature"
@@ -970,7 +1125,7 @@
 
     .feature-box-subheadline {
       color: $brand-primary;
-      font-size: 1rem;
+      font-size: 1.2rem;
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.15em;
@@ -983,22 +1138,13 @@
         justify-content: center;
       }
 
-      // Le point "Signature Fromton" (Fioriture)
-      &::before {
-        content: '';
-        width: 8px;
-        height: 8px;
-        background: $brand-primary;
-        border-radius: 50%;
-        display: block;
-        box-shadow: 0 0 10px rgba($brand-primary, 0.3);
-      }
+
     }
 
     p {
       font-size: 1.15rem;
       color: #666;
-      line-height: 1.9;
+      line-height: 1.5;
       font-weight: 300;
       max-width: 95%;
 
@@ -1010,6 +1156,36 @@
 
   &.-image-after-text {
     flex-direction: row;
+  }
+}
+
+.-color-inverted {
+  .feature-box {
+
+    h2,
+    p {
+      color: $white;
+    }
+  }
+}
+
+.headline {
+  font-weight: 400 !important;
+}
+
+h1.headline {
+  font-family: $font-family2;
+  color: $brand-secondary;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 20px;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+
+  font-size: 5rem;
+
+  @include mediaquery(mobile) {
+    font-size: 3rem;
   }
 }
 

@@ -85,7 +85,7 @@
 			<?php endif ?>
 
 			<?php if ($this->subHeadline): ?>
-				<h3 class="feature-box-subheadline"><?php echo $this->subHeadline ?></h3>
+				<div class="feature-box-subheadline"><?php echo $this->subHeadline ?></div>
 			<?php endif ?>
 
 			<?php echo $this->text ?>
