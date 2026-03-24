@@ -18661,7 +18661,8 @@ body.scroll .header-navigation .header-bar .header-bar-inner {
 .header-navigation .header-bar .header-bar-inner .navigation-wrapper.left-navigation-wrapper nav.main-navigation ul.level_1 li:nth-child(6) {
   animation-delay: 1.05s;
 }
-.header-navigation .header-bar .header-bar-inner .navigation-wrapper.left-navigation-wrapper nav.main-navigation ul.level_1 li a {
+.header-navigation .header-bar .header-bar-inner .navigation-wrapper.left-navigation-wrapper nav.main-navigation ul.level_1 li a,
+.header-navigation .header-bar .header-bar-inner .navigation-wrapper.left-navigation-wrapper nav.main-navigation ul.level_1 li strong {
   color: #231f20;
   font-family: "Anton", sans-serif;
   font-size: 1.25rem;
@@ -18675,10 +18676,17 @@ body.scroll .header-navigation .header-bar .header-bar-inner {
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 @media screen and (max-width: 1000px) {
-  .header-navigation .header-bar .header-bar-inner .navigation-wrapper.left-navigation-wrapper nav.main-navigation ul.level_1 li a {
+  .header-navigation .header-bar .header-bar-inner .navigation-wrapper.left-navigation-wrapper nav.main-navigation ul.level_1 li a,
+  .header-navigation .header-bar .header-bar-inner .navigation-wrapper.left-navigation-wrapper nav.main-navigation ul.level_1 li strong {
     font-size: 1rem;
     letter-spacing: 0.1em;
   }
+}
+.header-navigation .header-bar .header-bar-inner .navigation-wrapper.left-navigation-wrapper nav.main-navigation ul.level_1 li strong {
+  color: #f8ac1f;
+}
+.header-navigation .header-bar .header-bar-inner .navigation-wrapper.left-navigation-wrapper nav.main-navigation ul.level_1 li strong::after {
+  visibility: hidden;
 }
 .header-navigation .header-bar .header-bar-inner .navigation-wrapper.left-navigation-wrapper nav.main-navigation ul.level_1 li a:hover {
   color: #f8ac1f;

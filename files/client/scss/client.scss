@@ -331,45 +331,64 @@ button {
               }
             }
 
-            li a {
-              color: $brand-secondary;
-              font-family: $font-family2;
-              font-size: 1.25rem;
-              letter-spacing: 0.15em;
-              text-decoration: none;
-              text-transform: uppercase;
-              font-weight: 300;
-              display: block;
-              padding: 10px 0;
+            li {
 
-              @include mediaquery(tablet) {
-                font-size: 1rem; // Police plus compacte
-                letter-spacing: 0.1em;
-              }
+              a,
+              strong {
+                color: $brand-secondary;
+                font-family: $font-family2;
+                font-size: 1.25rem;
+                letter-spacing: 0.15em;
+                text-decoration: none;
+                text-transform: uppercase;
+                font-weight: 300;
+                display: block;
+                padding: 10px 0;
 
-              position: relative;
-              transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-
-              &:hover {
-                color: $brand-primary;
-              }
-
-              &::after {
-                content: '';
-                position: absolute;
-                width: 0;
-                height: 1px;
-                bottom: 4px;
-                left: 50%;
-                background-color: $brand-primary;
-                transition: all 0.3s ease;
-                transform: translateX(-50%);
-              }
-
-              &:hover {
-                &::after {
-                  width: 100%;
+                @include mediaquery(tablet) {
+                  font-size: 1rem; // Police plus compacte
+                  letter-spacing: 0.1em;
                 }
+
+                position: relative;
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+
+
+              }
+
+              strong {
+                color: $brand-primary;
+
+                &::after {
+                  visibility: hidden;
+                }
+              }
+
+              a {
+
+                &:hover {
+                  color: $brand-primary;
+                }
+
+                &::after {
+                  content: '';
+                  position: absolute;
+                  width: 0;
+                  height: 1px;
+                  bottom: 4px;
+                  left: 50%;
+                  background-color: $brand-primary;
+                  transition: all 0.3s ease;
+                  transform: translateX(-50%);
+                }
+
+                &:hover {
+                  &::after {
+                    width: 100%;
+                  }
+                }
+
               }
             }
           }

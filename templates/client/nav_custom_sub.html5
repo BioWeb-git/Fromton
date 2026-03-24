@@ -13,7 +13,6 @@
         <?php endif; ?>
 
         <li class="<?= $item['class'] ?>">
-
             <?php if ($item['isActive']): ?>
                 <strong class="<?= $item['class'] ?>"<?php if (!empty($item['subitems'])) echo ' aria-haspopup="true"'; ?>>
                     <?= $item['link'] ?>
