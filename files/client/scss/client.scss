@@ -2,6 +2,10 @@
 @import "variables";
 @import "custom";
 
+.text-intro {
+  font-size: 1.2em;
+}
+
 .main-navigation-mobile.is-active {
   z-index: 2000 !important;
 }
@@ -547,8 +551,9 @@ button {
 
                 a,
                 strong {
+                  background: $brand-primary;
                   border-radius: 50px;
-                  color: $brand-secondary;
+                  color: $black;
                   font-family: $font-family2;
                   font-size: 1.3rem;
                   letter-spacing: 0.25em;
@@ -1150,6 +1155,18 @@ button {
     }
   }
 
+  .feature-box-text {
+    h2 {
+      margin-bottom: 0 !important;
+    }
+
+    .feature-box-subheadline {
+      padding-bottom: 15px;
+      margin-bottom: 5px !important;
+      border-bottom: 1px solid $brand-primary;
+    }
+  }
+
   // Animations au scroll (croisées gche/dte)
   .feature-box-image,
   .feature-box-text {
@@ -1462,6 +1479,32 @@ h2.headline {
         font-weight: 700;
         color: $brand-secondary;
       }
+    }
+  }
+}
+
+.page-footer {
+  .icon-links {
+
+    &.social {
+      a {
+        color: $brand-secondary;
+
+        &:hover,
+        &:focus {
+          color: $brand-primary;
+          background: $brand-secondary !important;
+        }
+      }
+    }
+  }
+}
+
+.teaser-boxes {
+  .teaser-boxes-item {
+    .teaser-boxes-label {
+      background: $brand-primary !important;
+      color: $brand-secondary !important;
     }
   }
 }
