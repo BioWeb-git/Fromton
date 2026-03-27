@@ -18378,6 +18378,20 @@ form .honeyshow {
   align-items: center;
   justify-content: center;
 }
+.main-navigation-mobile .logo {
+  border-radius: 50%;
+  overflow: hidden;
+}
+.main-navigation-mobile .logo span {
+  display: block;
+  text-align: center;
+}
+.main-navigation-mobile .logo img {
+  display: inline-block;
+  height: auto;
+  width: 90%;
+  max-width: 11em;
+}
 .main-navigation-mobile .main-navigation {
   width: 100%;
   font-size: 1.5em;
@@ -19597,6 +19611,15 @@ h2.headline {
   color: #231f20;
 }
 
+.page-footer .certifications {
+  text-align: center;
+  max-width: 300px;
+  margin: 50px auto;
+}
+.page-footer .header-links {
+  align-items: center;
+  justify-content: center;
+}
 .page-footer .icon-links.social a {
   color: #231f20;
 }
