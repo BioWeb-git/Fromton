@@ -166,8 +166,8 @@ button {
 
   // Effet de profondeur et Brillance Inset
   box-shadow:
-    0 15px 35px rgba(0, 0, 0, 0.4),
-    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    0 5px 15px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
 
   transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 
@@ -208,7 +208,7 @@ button {
     color: white !important;
     transform: translateY(-6px) scale(1.02);
     box-shadow:
-      0 20px 40px rgba(0, 0, 0, 0.35),
+      0 10px 25px rgba(0, 0, 0, 0.35),
       inset 0 1px 2px rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.4);
 
@@ -570,7 +570,7 @@ button {
                 strong {
                   background: $brand-primary;
                   border-radius: 50px;
-                  color: $black;
+                  color: $white;
                   font-family: $font-family2;
                   font-size: 1.3rem;
                   letter-spacing: 0.25em;
@@ -578,7 +578,8 @@ button {
                   text-transform: uppercase;
                   font-weight: 400;
                   padding: 0.5em;
-                  transition: color 0.3s ease;
+                  @extend .button;
+                  @include transition;
 
                   a {
                     &:hover {
@@ -590,6 +591,11 @@ button {
                     &:hover {
                       color: black;
                     }
+                  }
+
+                  &:hover,
+                  &:focus {
+                    transform: translateY(0)
                   }
                 }
               }
@@ -1180,7 +1186,7 @@ button {
     .feature-box-subheadline {
       padding-bottom: 15px;
       margin-bottom: 5px !important;
-      border-bottom: 1px solid $brand-primary;
+      border-bottom: 1px solid $grey-light;
     }
   }
 
@@ -1454,7 +1460,7 @@ h2.headline {
 
   // Titre de la page
   .breadcrumbs-headline {
-    color: $brand-secondary !important;
+    color: $white !important;
     font-family: $font-family2;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -1483,7 +1489,7 @@ h2.headline {
 
       a,
       span {
-        color: $brand-secondary !important;
+        color: $white !important;
         text-decoration: none;
         transition: opacity 0.3s ease;
 
@@ -1494,7 +1500,7 @@ h2.headline {
 
       &.active {
         font-weight: 700;
-        color: $brand-secondary;
+        color: $white;
       }
     }
   }
@@ -1532,7 +1538,7 @@ h2.headline {
   .teaser-boxes-item {
     .teaser-boxes-label {
       background: $brand-primary !important;
-      color: $brand-secondary !important;
+      color: $white !important;
     }
   }
 }
