@@ -114,6 +114,20 @@ button {
   }
 }
 
+body {
+  &.home {
+    .page-header {
+      padding-top: 0 !important;
+    }
+
+    .tagline-fullheight {
+      @include mediaquery-min(tablet) {
+        height: 100vh;
+      }
+    }
+  }
+}
+
 .main-content .-color-inverted h2 {
   color: $white;
 }
@@ -979,6 +993,14 @@ button {
     opacity: 0;
     transform: translateY(30px);
 
+    &.-color-inverted {
+
+      .icon-boxes-item-title,
+      .icon-boxes-item-text p {
+        color: $white !important;
+      }
+    }
+
     // Le Cercle Image (Signature Ring)
     .icon-boxes-item-icon {
       margin: 0 auto 35px !important;
@@ -1373,6 +1395,13 @@ button {
       color: $white;
     }
   }
+
+  .headline-box {
+    &:after {
+      background: $white;
+
+    }
+  }
 }
 
 .headline {
@@ -1539,6 +1568,23 @@ h2.headline {
     .teaser-boxes-label {
       background: $brand-primary !important;
       color: $white !important;
+    }
+  }
+}
+
+.event-boxes {
+  margin-top: 25px;
+
+  .teaser-boxes-item {
+    .teaser-boxes-label {
+      background: none !important;
+      color: $black !important;
+      border: none !important;
+      font-size: 1.3em;
+    }
+
+    .teaser-boxes-content {
+      text-align: left;
     }
   }
 }

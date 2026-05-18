@@ -1,6 +1,6 @@
 $legacy-support-for-ie: false;
 $text-transform: uppercase;
-
+$white: #f0ecec;
 // Brand Colors
 $brand-primary: #272727;
 $brand-secondary: #231f20;
@@ -22,7 +22,7 @@ $breakpoint-desktopxl: 1400px !default;
 
 // Theme variable overrides
 $button-background-color: $brand-secondary;
-$button-color: #fff;
+$button-color: #f0ecec;
 $selection-color: $brand-primary;
 $breakpoint-desktop: $max-width !default;
 $breakpoint-tablet: 1000px !default;
