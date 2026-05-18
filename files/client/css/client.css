@@ -19756,6 +19756,10 @@ h2.headline {
   border: none !important;
   font-size: 1.3em;
 }
+.event-boxes .teaser-boxes-item .teaser-boxes-image {
+  border-radius: 50px;
+  overflow: hidden;
+}
 .event-boxes .teaser-boxes-item .teaser-boxes-content {
   text-align: left;
 }
