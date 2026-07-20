@@ -19730,6 +19730,9 @@ h2.headline {
   max-width: 300px;
   margin: 50px auto;
 }
+.page-footer .certifications img {
+  mix-blend-mode: multiply;
+}
 .page-footer .header-links {
   align-items: center;
   justify-content: center;

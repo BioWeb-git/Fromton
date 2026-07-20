@@ -1540,6 +1540,10 @@ h2.headline {
     text-align: center;
     max-width: 300px;
     margin: 50px auto;
+
+    img {
+      mix-blend-mode: multiply;
+    }
   }
 
   .header-links {
