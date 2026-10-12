@@ -47,3 +47,4 @@ Thumbs.db
 
 # Windows Security Metadata (Zone.Identifier)
 *:Zone.Identifier
+/public/.well-known/
