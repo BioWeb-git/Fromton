@@ -1,0 +1,25 @@
+<article class="layout_gallery_fondus_reader news-reader <?= $this->class ?>">
+    <?php if ($this->text): ?>
+        <?= $this->text ?>
+    <?php else: ?>
+        <?php
+            $contentElements = \Contao\ContentModel::findPublishedByPidAndTable($this->id, 'tl_news');
+            if ($contentElements) {
+                foreach ($contentElements as $content) {
+                    echo \Contao\Controller::getContentElement($content->id);
+                }
+            }
+        ?>
+    <?php endif; ?>
+
+    <div class="galerie-fondus-reader-back">
+        <?php
+            $galleryPage = \Contao\PageModel::findById(295);
+            $backUrl = $galleryPage ? $galleryPage->getFrontendUrl() : 'galerie-des-fondus';
+        ?>
+        <a href="<?= $backUrl ?>" class="galerie-fondus-back-link">
+            <span class="arrow">&larr;</span>
+            <span>Retour &agrave; la galerie</span>
+        </a>
+    </div>
+</article>

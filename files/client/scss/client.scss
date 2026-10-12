@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Kalam:wght@700&display=swap');
 @import "variables_client";
 @import "variables";
 @import "custom";
@@ -1595,5 +1596,392 @@ h2.headline {
     .teaser-boxes-content {
       text-align: left;
     }
+  }
+}
+
+// ==========================================
+// GALERIE DES FONDUS (Photos, Vidéos, Grille 1:1)
+// ==========================================
+.layout_gallery_fondus {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.galerie-fondus-section {
+  width: 100%;
+  padding: 60px 0 70px;
+  position: relative;
+  transition: background-color 0.3s ease;
+
+  .galerie-fondus-inner {
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 0 25px;
+  }
+
+  // En-tête de la galerie
+  .galerie-fondus-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 28px;
+    gap: 20px;
+
+    .galerie-fondus-titles {
+      flex: 1;
+
+      .galerie-fondus-title {
+        @extend .font2;
+        font-size: clamp(2rem, 3.8vw, 3.2rem);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        line-height: 1.1;
+        margin: 0 0 6px 0;
+        font-weight: 700;
+      }
+
+      .galerie-fondus-subtitle {
+        font-family: $font-family-handwritten;
+        font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+        margin: 4px 0 0;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        line-height: 1.2;
+        transform: rotate(-1.5deg);
+        transform-origin: left center;
+
+        // Double trait manuscrit dynamique (comme sur la maquette ═)
+        &::after {
+          content: "";
+          display: inline-block;
+          width: 32px;
+          height: 6px;
+          border-top: 2.5px solid currentColor;
+          border-bottom: 2.5px solid currentColor;
+          transform: rotate(-2deg);
+          opacity: 0.85;
+          flex-shrink: 0;
+        }
+      }
+    }
+
+  }
+
+  // Grille carrée 1:1 (6 colonnes par défaut)
+  .galerie-fondus-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+  }
+
+  // Cases médias
+  .galerie-fondus-item {
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+
+    // Support de la classe animation Scroll .is-animated
+    &.is-animated {
+      &.not-in-view {
+        opacity: 0;
+        transform: translateY(18px) scale(0.97);
+      }
+
+      &.in-view,
+      &.has-shown {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        transition: opacity 0.5s cubic-bezier(0.165, 0.84, 0.44, 1),
+                    transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+    }
+
+    .galerie-fondus-link {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .galerie-fondus-thumb-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background-color: rgba(0, 0, 0, 0.08);
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.45s cubic-bezier(0.165, 0.84, 0.44, 1),
+                    filter 0.45s ease;
+      }
+    }
+
+    &:hover {
+      .galerie-fondus-thumb-wrapper img {
+        transform: scale(1.06);
+      }
+    }
+
+    // Badge vidéo Play
+    &--video {
+      .galerie-fondus-play-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 2;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        svg {
+          filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+        }
+      }
+
+      &:hover {
+        .galerie-fondus-play-badge {
+          transform: translate(-50%, -50%) scale(1.15);
+        }
+      }
+    }
+
+    // 12ème case : Carte "LA SUITE !"
+    &--more-card {
+      .galerie-fondus-more-card-link {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 1 / 1;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+        .galerie-fondus-more-card-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          text-align: center;
+          padding: 10px;
+
+          .galerie-fondus-more-card-text {
+            @extend .font2;
+            font-size: clamp(1.1rem, 1.5vw, 1.45rem);
+            letter-spacing: 0.08em;
+            font-weight: 700;
+            line-height: 1.2;
+            text-transform: uppercase;
+          }
+
+          .galerie-fondus-more-card-arrow {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+          }
+        }
+
+        &:hover {
+          transform: scale(1.02);
+
+          .galerie-fondus-more-card-arrow {
+            transform: translateX(6px);
+          }
+        }
+      }
+    }
+  }
+
+  // ----------------------------------------------------
+  // ALTERNANCE ODD / EVEN (Fond clair / Fond sombre)
+  // ----------------------------------------------------
+  // Style par défaut / Impair (Fond beige clair / texte foncé)
+  background-color: $white;
+  color: $brand-secondary;
+
+  .galerie-fondus-title {
+    color: $brand-secondary;
+  }
+
+  .galerie-fondus-subtitle {
+    color: $brand-secondary;
+  }
+
+
+  .galerie-fondus-item--more-card .galerie-fondus-more-card-link {
+    background-color: $brand-secondary;
+    color: $white;
+
+    &:hover {
+      background-color: lighten($brand-secondary, 6%);
+    }
+  }
+
+  // Style Pair (Fond sombre / texte blanc)
+  // Pris en charge via :nth-child(even), classe .even ou .dark-theme
+  &:nth-child(even),
+  &.even,
+  &.dark-theme,
+  .layout_gallery_fondus:nth-child(even) & {
+    background-color: $brand-secondary;
+    color: $white;
+
+    .galerie-fondus-title {
+      color: #ffffff;
+    }
+
+    .galerie-fondus-subtitle {
+      color: $color-subtitle-dark;
+    }
+
+
+    .galerie-fondus-item--more-card .galerie-fondus-more-card-link {
+      background-color: $white;
+      color: $brand-secondary;
+
+      &:hover {
+        background-color: #ffffff;
+      }
+    }
+  }
+
+  // Responsive Breakpoints
+  @media (max-width: $breakpoint-tablet) {
+    padding: 45px 0 55px;
+
+    .galerie-fondus-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    padding: 35px 0 45px;
+
+    .galerie-fondus-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .galerie-fondus-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+  }
+}
+
+// Lecteur (Reader) - Fond blanc
+.layout_gallery_fondus_reader {
+  width: 100%;
+  background-color: $white;
+
+  .galerie-fondus-section {
+    background-color: $white !important;
+    color: $brand-secondary !important;
+
+    .galerie-fondus-title {
+      color: $brand-secondary !important;
+    }
+
+    .galerie-fondus-subtitle {
+      color: $brand-secondary !important;
+    }
+  }
+
+  .galerie-fondus-reader-back {
+    max-width: $max-width;
+    margin: 40px auto 70px;
+    padding: 0 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .galerie-fondus-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      @extend .font2;
+      font-size: 1.15rem;
+      letter-spacing: 0.08em;
+      color: $brand-secondary;
+      text-decoration: none;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      border: 1.5px solid currentColor;
+      border-radius: 4px;
+      transition: all 0.25s ease;
+
+      .arrow {
+        transition: transform 0.25s ease;
+      }
+
+      &:hover {
+        background-color: $brand-secondary;
+        color: $white;
+
+        .arrow {
+          transform: translateX(-4px);
+        }
+      }
+    }
+  }
+}
+
+// Centrage et affichage vidéo dans le viewer PhotoSwipe
+.pswp__zoom-wrap:has(.pswp-video-wrapper),
+.pswp__zoom-wrap:has(.pswp__content) {
+  transform: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.pswp__content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
+}
+
+.pswp-video-wrapper {
+  position: relative;
+  width: 90vw;
+  max-width: 1100px;
+  max-height: 80vh;
+  aspect-ratio: 16 / 9;
+  margin: auto;
+
+  iframe,
+  video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.85);
   }
 }

@@ -1,0 +1,239 @@
+<?php
+    if (!isset($GLOBALS['photoswipe_gallery_lib']) || !$GLOBALS['photoswipe_gallery_lib']) {
+        $GLOBALS['TL_CSS'][] = 'files/js/photoswipe/photoswipe.css';
+        $photoswipe_gallery_lib = true;
+    }
+
+    $galleryId = !empty($this->cssID[0]) ? $this->cssID[0] : 'galerie-fondus-' . $this->id;
+
+    // Récupération des médias
+    $allMedia = array();
+
+    // 1. Photos
+    if (is_array($this->images)) {
+        foreach (\Contao\FilesModel::findMultipleByUuids($this->images) as $file) {
+            if (in_array($file->extension, \Contao\System::getContainer()->getParameter('contao.image.valid_extensions'))) {
+                $imageObj = $this->getImageObject($file->uuid, [600, 600, 'crop']);
+                $fullImage = $this->getImageObject($file->uuid);
+
+                if ($imageObj) {
+                    $allMedia[] = array(
+                        'type' => 'image',
+                        'thumb' => $imageObj->src,
+                        'full' => $fullImage ? $fullImage->src : $imageObj->src,
+                        'width' => $fullImage ? $fullImage->width : 1600,
+                        'height' => $fullImage ? $fullImage->height : 1200,
+                        'alt' => $imageObj->alt ?: ($this->headline ?: 'Fromton Galerie'),
+                        'caption' => $imageObj->caption ?: '',
+                    );
+                }
+            }
+        }
+    }
+
+    // 2. Vidéos
+    if (is_array($this->videos)) {
+        foreach ($this->videos as $video) {
+            $videoUrl = trim((string)$video->videoUrl);
+            if (empty($videoUrl)) {
+                continue;
+            }
+
+            $posterThumb = null;
+            $posterFull = null;
+            $posterWidth = 1920;
+            $posterHeight = 1080;
+
+            if (!empty($video->poster)) {
+                $posterObj = $this->getImageObject($video->poster, [600, 600, 'crop']);
+                $posterFullObj = $this->getImageObject($video->poster);
+                if ($posterObj) {
+                    $posterThumb = $posterObj->src;
+                    $posterFull = $posterFullObj ? $posterFullObj->src : $posterObj->src;
+                    $posterWidth = $posterFullObj ? $posterFullObj->width : 1920;
+                    $posterHeight = $posterFullObj ? $posterFullObj->height : 1080;
+                }
+            }
+
+            // Détection YouTube ID pour vignette de repli
+            $youtubeId = '';
+            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $videoUrl, $match)) {
+                $youtubeId = $match[1];
+                if (!$posterThumb) {
+                    $posterThumb = 'https://img.youtube.com/vi/' . $youtubeId . '/hqdefault.jpg';
+                    $posterFull = 'https://img.youtube.com/vi/' . $youtubeId . '/maxresdefault.jpg';
+                }
+            }
+
+            $allMedia[] = array(
+                'type' => 'video',
+                'videoUrl' => $videoUrl,
+                'youtubeId' => $youtubeId,
+                'thumb' => $posterThumb,
+                'full' => $posterFull ?: $posterThumb,
+                'width' => $posterWidth,
+                'height' => $posterHeight,
+                'title' => (string)$video->title,
+            );
+        }
+    }
+
+    // Détection automatique du contexte (Lecteur vs Liste)
+    $isReaderPage = (bool)(\Contao\Input::get('auto_item') || \Contao\Input::get('items'));
+    $isFullMode = $isReaderPage;
+
+    $totalCount = count($allMedia);
+    $hasMoreThan11 = ($totalCount > 11);
+    $displayMedia = $allMedia;
+    $showMoreCard = false;
+
+    // Résolution automatique de l'URL vers la page complète de l'actualité
+    $moreUrl = '';
+    if (!empty($this->link)) {
+        $moreUrl = $this->link;
+    } elseif (!empty($this->pid) && $this->ptable === 'tl_news') {
+        $newsModel = \Contao\NewsModel::findByPk($this->pid);
+        if ($newsModel) {
+            $moreUrl = \Contao\News::generateNewsUrl($newsModel);
+        }
+    }
+
+    if (empty($moreUrl)) {
+        $moreUrl = !empty($this->moreLink) ? $this->moreLink : '#';
+    }
+
+    // Règle 100% automatique : si on est en liste et qu'il y a plus de 11 médias,
+    // on affiche les 11 premiers et la 12ème case 'La suite !'
+    if (!$isFullMode && $hasMoreThan11) {
+        $displayMedia = array_slice($allMedia, 0, 11);
+        $showMoreCard = true;
+    }
+?>
+
+<div class="galerie-fondus-section <?= $this->class ?>" id="<?= $galleryId ?>" data-gallery-id="<?= $galleryId ?>">
+    <div class="galerie-fondus-inner container-fluid">
+
+        <?php if ($this->headline || $this->subheadline || ($showMoreCard && $moreUrl)): ?>
+            <div class="galerie-fondus-header">
+                <div class="galerie-fondus-titles">
+                    <?php if ($this->headline): ?>
+                        <<?= $this->hl ?: 'h2' ?> class="galerie-fondus-title"><?= $this->headline ?></<?= $this->hl ?: 'h2' ?>>
+                    <?php endif; ?>
+
+                    <?php if ($this->subheadline): ?>
+                        <p class="galerie-fondus-subtitle text-handwritten"><?= $this->subheadline ?></p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <div class="galerie-fondus-grid">
+            <?php foreach ($displayMedia as $index => $item): ?>
+                <?php if ($item['type'] === 'image'): ?>
+                    <div class="galerie-fondus-item galerie-fondus-item--photo is-animated">
+                        <a href="<?= $item['full'] ?>"
+                           class="galerie-fondus-link pswp-link"
+                           data-pswp-width="<?= $item['width'] ?>"
+                           data-pswp-height="<?= $item['height'] ?>"
+                           data-cropped="true"
+                           <?php if (!empty($item['caption'])): ?>data-pswp-caption="<?= htmlspecialchars($item['caption']) ?>"<?php endif; ?>
+                        >
+                            <div class="galerie-fondus-thumb-wrapper">
+                                <img src="<?= $item['thumb'] ?>" alt="<?= htmlspecialchars($item['alt']) ?>" loading="lazy" />
+                            </div>
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <div class="galerie-fondus-item galerie-fondus-item--video is-animated">
+                        <a href="<?= $item['videoUrl'] ?>"
+                           class="galerie-fondus-link pswp-link is-video"
+                           data-pswp-type="video"
+                           data-video-url="<?= htmlspecialchars($item['videoUrl']) ?>"
+                           title="<?= htmlspecialchars($item['title'] ?: 'Voir la vidéo') ?>"
+                        >
+                            <div class="galerie-fondus-thumb-wrapper">
+                                <?php if ($item['thumb']): ?>
+                                    <img src="<?= $item['thumb'] ?>" alt="<?= htmlspecialchars($item['title'] ?: 'Vidéo') ?>" loading="lazy" />
+                                <?php else: ?>
+                                    <div class="galerie-fondus-video-placeholder"></div>
+                                <?php endif; ?>
+                                <span class="galerie-fondus-play-badge" aria-hidden="true">
+                                    <svg viewBox="0 0 48 48" width="48" height="48" fill="currentColor">
+                                        <circle cx="24" cy="24" r="23" fill="rgba(0,0,0,0.6)" stroke="#ffffff" stroke-width="2"/>
+                                        <polygon points="19,14 34,24 19,34" fill="#ffffff"/>
+                                    </svg>
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <?php if ($showMoreCard && $moreUrl): ?>
+                <div class="galerie-fondus-item galerie-fondus-item--more-card is-animated">
+                    <a href="<?= $moreUrl ?>" class="galerie-fondus-more-card-link" title="Découvrir toute la suite">
+                        <div class="galerie-fondus-more-card-content">
+                            <span class="galerie-fondus-more-card-text">La suite !</span>
+                            <span class="galerie-fondus-more-card-arrow">&rarr;</span>
+                        </div>
+                    </a>
+                </div>
+            <?php endif; ?>
+        </div>
+
+    </div>
+</div>
+
+<?php
+// Initialisation PhotoSwipe 5 pour cette galerie
+$cleanGalleryId = preg_replace('/[^a-zA-Z0-9_]/', '_', $galleryId);
+$GLOBALS['TL_BODY'][] = '
+<script type="module">
+    import PhotoSwipeLightbox from "./files/js/photoswipe/photoswipe-lightbox.esm.js";
+    const lightbox_' . $cleanGalleryId . ' = new PhotoSwipeLightbox({
+        gallery: "#' . $galleryId . '",
+        children: "a.pswp-link",
+        showHideAnimationType: "fade",
+        bgOpacity: 0.95,
+        wheelToZoom: true,
+        preloaderDelay: 200,
+        pswpModule: () => import("./files/js/photoswipe/photoswipe.esm.js")
+    });
+
+    // Desactive le placeholder pour eviter la superposition de la vignette 1:1
+    lightbox_' . $cleanGalleryId . '.addFilter("useContentPlaceholder", () => false);
+    lightbox_' . $cleanGalleryId . '.addFilter("placeholderSrc", () => false);
+
+    // Support des vidéos et suppression de msrc (vignette croppée) dans PhotoSwipe
+    lightbox_' . $cleanGalleryId . '.addFilter("itemData", (itemData, index) => {
+        delete itemData.msrc;
+        const el = itemData.element;
+        const videoUrl = el ? el.getAttribute("data-video-url") : null;
+        if (videoUrl) {
+            delete itemData.width;
+            delete itemData.height;
+            delete itemData.w;
+            delete itemData.h;
+            itemData.type = "html";
+
+            let embedHtml = "";
+            const ytMatch = videoUrl.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i);
+            const vmMatch = videoUrl.match(/(?:vimeo\.com\/)(\d+)/i);
+
+            if (ytMatch) {
+                embedHtml = `<div class="pswp-video-wrapper"><iframe src="https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+            } else if (vmMatch) {
+                embedHtml = `<div class="pswp-video-wrapper"><iframe src="https://player.vimeo.com/video/${vmMatch[1]}?autoplay=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+            } else {
+                embedHtml = `<div class="pswp-video-wrapper"><video src="${videoUrl}" controls autoplay playsinline></video></div>`;
+            }
+
+            itemData.html = embedHtml;
+        }
+        return itemData;
+    });
+
+    lightbox_' . $cleanGalleryId . '.init();
+</script>
+';
+?>

@@ -108,10 +108,11 @@ Contao 5 permet d'exclure ponctuellement les tables sensibles à la demande via 
   - Alternative : **GLightbox** si PhotoSwipe s'avère trop rigide pour les flux vidéo externes (YouTube/Vimeo).
 
 #### 5. Page Liste vs Page Détail (Reader)
-- **Sur la liste des galeries** :
-  - Limite stricte à **12 médias affichés par actualité**.
-  - Si l'actualité contient plus de 12 médias : présence du bouton / lien **"VOIR PLUS →"**.
-  - Clic sur une photo de la liste : ouvre quand même la lightbox.
+- **Sur la liste des actualités / galeries** :
+  - **Grille de 12 cases max (6x2)** :
+    - Si l'actualité contient **<= 11 médias** : affichage de tous les médias, pas de case "La suite !".
+    - Si l'actualité contient **> 11 médias** : affichage des **11 premiers médias**, et la **12ème case** est une vignette cliquable "La suite !" qui redirige vers le reader complet de l'actualité.
+  - Clic sur une photo ou vidéo de la liste : ouvre directement la lightbox PhotoSwipe.
 - **Sur la page détaillée (News Reader)** :
   - Affiche l'ensemble de tous les médias de l'événement sans limitation à 12.
 
