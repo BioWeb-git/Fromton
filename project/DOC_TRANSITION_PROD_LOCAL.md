@@ -23,7 +23,22 @@ Création d'un backup complet de la base actuelle (conservé hors accès web sur
 mysqldump -u fromton_prod -p fromton_prod | gzip > ~/backups/backup_full_prod_$(date +%Y%m%d_%H%M%S).sql.gz
 ```
 
-### B. Export prêt pour le développement local (sans les messages)
+### B. Méthode 1 (Recommandée & Intégrée) : Via la console Contao
+
+Contao 5 permet d'exclure ponctuellement les tables sensibles à la demande via l'option `--ignore-tables` sans modifier la configuration globale (ainsi les sauvegardes de production conservent bien l'intégralité des leads) :
+
+1. **Création du backup pour rapatriement local (en ignorant les tables de leads)** :
+   ```bash
+   vendor/bin/contao-console contao:backup:create backup_for_local --ignore-tables="+tl_lead,+tl_lead_data"
+   ```
+2. **Ou à la restauration (en ignorant les tables de leads au moment de réinjecter)** :
+   ```bash
+   vendor/bin/contao-console contao:backup:restore <nom_du_backup> --ignore-tables="+tl_lead,+tl_lead_data"
+   ```
+   > [!NOTE]
+   > L'argument `--ignore-tables` permet d'ignorer spécifiquement ces tables lors de la commande, garantissant que les soumissions en production ne sont jamais écrasées, tout en laissant les backups de production réguliers sauvegarder 100% de la base.
+
+### C. Méthode 2 (Alternative manuelle) : Export MySQL Dump
 1. **Export de l'ensemble de la base SAUF les données des leads** :
    ```bash
    mysqldump -u fromton_prod -p --ignore-table=fromton_prod.tl_lead --ignore-table=fromton_prod.tl_lead_data fromton_prod > dump_for_local_base.sql
@@ -128,9 +143,14 @@ mysqldump -u fromton_prod -p fromton_prod | gzip > ~/backups/backup_full_prod_$(
 
 ## 4. Phase 3 : Retour en Production (Déploiement Sécurisé)
 
-### Rappel des règles d'or
-- **Ne jamais écraser `tl_lead` ni `tl_lead_data` sur la prod.**
-- **Toujours tester le dump sur une base locale de dev au préalable.**
+> [!IMPORTANT]
+> **RÈGLE CRUCIALE POUR LE BACKUP FINAL EN LOCAL :**
+> Une fois la fonctionnalité de la **Galerie des fondus** entièrement terminée et validée en local, au tout dernier `backup:create` destiné à être envoyé sur la production, **il faut impérativement ignorer les tables leads** :
+> ```bash
+> vendor/bin/contao-console contao:backup:create backup_pour_prod --ignore-tables="+tl_lead,+tl_lead_data"
+> ```
+> **Pourquoi cette méthode est infaillible :**
+> Le dump généré ne comportera aucune instruction `DROP TABLE`, `CREATE TABLE` ou `INSERT` pour `tl_lead` et `tl_lead_data`. Lors du `contao:backup:restore backup_pour_prod` en production, MySQL n'aura pas à toucher à ces tables : toutes les soumissions de formulaires reçues en production resteront à 100% intactes !
 
 ### Scénarios de déploiement :
 1. **Déploiement Code / Templates / SCSS** :
@@ -140,5 +160,16 @@ mysqldump -u fromton_prod -p fromton_prod | gzip > ~/backups/backup_full_prod_$(
 2. **Déploiement Structure & Données BDD (News, Pages, Modules)** :
    - Si les pages/modules ont été créés en local :
      - **Option 1 (Idéale & la plus sûre)** : Re-créer les modules/pages/archives News dans le back-office de production directement, ce qui évite toute manipulation risquée de la base de données de production.
-     - **Option 2 (Import SQL partiel)** : Exporter uniquement les tables modifiées (`tl_news`, `tl_news_archive`, `tl_page`, `tl_module`, `tl_content`) ou un dump avec `--ignore-table=fromton_prod.tl_lead --ignore-table=fromton_prod.tl_lead_data` en prenant soin de faire un backup préalable de la prod.
+     - **Option 2 (Backup final local avec exclusion & restauration directe en prod)** :
+       1. **Dernier backup en local** (avec exclusion obligatoire des leads) :
+          ```bash
+          vendor/bin/contao-console contao:backup:create backup_pour_prod --ignore-tables="+tl_lead,+tl_lead_data"
+          ```
+       2. Transférer le fichier (ou commit / push / pull) sur la production.
+       3. **Restauration en production** :
+          ```bash
+          vendor/bin/contao-console contao:backup:restore backup_pour_prod
+          ```
+          *(Comme les tables `tl_lead` et `tl_lead_data` sont physiquement absentes du fichier SQL, les messages et leads de production ne sont pas écrasés)*.
+     - **Option 3 (Import SQL partiel)** : Exporter uniquement les tables modifiées (`tl_news`, `tl_news_archive`, `tl_page`, `tl_module`, `tl_content`) ou un dump avec `--ignore-table=fromton_prod.tl_lead --ignore-table=fromton_prod.tl_lead_data` en prenant soin de faire un backup préalable de la prod.
 
