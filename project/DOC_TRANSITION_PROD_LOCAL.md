@@ -148,10 +148,12 @@ Contao 5 permet d'exclure ponctuellement les tables sensibles à la demande via 
 > **RÈGLE CRUCIALE POUR LE BACKUP FINAL EN LOCAL :**
 > Une fois la fonctionnalité de la **Galerie des fondus** entièrement terminée et validée en local, au tout dernier `backup:create` destiné à être envoyé sur la production, **il faut impérativement ignorer les tables leads** :
 > ```bash
-> vendor/bin/contao-console contao:backup:create backup_pour_prod --ignore-tables="+tl_lead,+tl_lead_data"
+> vendor/bin/contao-console contao:backup:create --ignore-tables="+tl_lead,+tl_lead_data"
 > ```
+> *(Génère automatiquement un fichier horodaté dans `var/backups/`, ex. `backup__20261013121137.sql.gz`)*
+> 
 > **Pourquoi cette méthode est infaillible :**
-> Le dump généré ne comportera aucune instruction `DROP TABLE`, `CREATE TABLE` ou `INSERT` pour `tl_lead` et `tl_lead_data`. Lors du `contao:backup:restore backup_pour_prod` en production, MySQL n'aura pas à toucher à ces tables : toutes les soumissions de formulaires reçues en production resteront à 100% intactes !
+> Le dump généré ne comportera aucune instruction `DROP TABLE`, `CREATE TABLE` ou `INSERT` pour `tl_lead` et `tl_lead_data`. Lors du `contao:backup:restore <nom_du_backup>` en production, MySQL n'aura pas à toucher à ces tables : toutes les soumissions de formulaires reçues en production resteront à 100% intactes !
 
 ### Scénarios de déploiement :
 1. **Déploiement Code / Templates / SCSS** :
@@ -164,12 +166,13 @@ Contao 5 permet d'exclure ponctuellement les tables sensibles à la demande via 
      - **Option 2 (Backup final local avec exclusion & restauration directe en prod)** :
        1. **Dernier backup en local** (avec exclusion obligatoire des leads) :
           ```bash
-          vendor/bin/contao-console contao:backup:create backup_pour_prod --ignore-tables="+tl_lead,+tl_lead_data"
+          vendor/bin/contao-console contao:backup:create --ignore-tables="+tl_lead,+tl_lead_data"
           ```
+          *(Fichier généré prêt pour la prod : `var/backups/backup__20261013121137.sql.gz`)*
        2. Transférer le fichier (ou commit / push / pull) sur la production.
        3. **Restauration en production** :
           ```bash
-          vendor/bin/contao-console contao:backup:restore backup_pour_prod
+          vendor/bin/contao-console contao:backup:restore backup__20261013121137.sql.gz
           ```
           *(Comme les tables `tl_lead` et `tl_lead_data` sont physiquement absentes du fichier SQL, les messages et leads de production ne sont pas écrasés)*.
      - **Option 3 (Import SQL partiel)** : Exporter uniquement les tables modifiées (`tl_news`, `tl_news_archive`, `tl_page`, `tl_module`, `tl_content`) ou un dump avec `--ignore-table=fromton_prod.tl_lead --ignore-table=fromton_prod.tl_lead_data` en prenant soin de faire un backup préalable de la prod.
