@@ -20147,8 +20147,12 @@ h2.headline {
   }
 }
 
+.text-handwritten,
 .galerie-fondus-hero-subtitle {
-  font-family: "Kalam", "Caveat", cursive;
+  font-family: "Kalam", "Caveat", cursive !important;
+}
+
+.galerie-fondus-hero-subtitle {
   color: #e5be79;
   font-size: clamp(2.8rem, 6vw, 5.2rem);
   font-weight: 700;
